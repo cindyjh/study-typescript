@@ -4,6 +4,7 @@ import { NoteComponent } from "./components/page/items/note.js";
 import { TodoComponent } from "./components/page/items/todo.js";
 import { VideoComponent } from "./components/page/items/video.js";
 import { Component } from "./components/component.js";
+import { InputDialog } from "./components/dialog/dialog.js";
 
 class App {
     private readonly page: Component & Composable;
@@ -25,6 +26,20 @@ class App {
 
         const todo = new TodoComponent("TodoComponent Title", 'todo')
         this.page.addChild(todo);
+
+        const imageBtn = document.querySelector('#new-image')! as HTMLButtonElement;
+        imageBtn.addEventListener('click', () => {
+            const dialog = new InputDialog();
+            dialog.setOnCloseListener(() => {
+                dialog.removeFrom(document.body);
+            })
+            dialog.setOnSubmitListener(() => {
+                // TODO: 섹션을 만들어 페이지에 추가해줘야 한다.
+                dialog.removeFrom(document.body);
+            })
+
+            dialog.attachTo(document.body)
+        })
     } 
 }
 

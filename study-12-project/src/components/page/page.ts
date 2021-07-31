@@ -6,7 +6,18 @@ export interface Composable {
 
 type OnCloseListener = () => void;
 
-class PageItemComponent extends BaseComponent<HTMLElement> implements Composable{
+interface SectionContainer extends Component, Composable {
+    setOnCloseListener(listener: OnCloseListener): void;
+}
+
+type SectionContainerConstructor = {
+    // 생성자가 호출이 되면 SectionContainer를 구현하는 어떤 클래스라도 
+    new (): SectionContainer;
+}
+
+// 어떤 방식으로 UI를 만들든
+// closeListener를 꼭 구현해주어야 한다.
+export class PageItemComponent extends BaseComponent<HTMLElement> implements SectionContainer{
     private closeListener?: OnCloseListener;
     constructor() {
         super(`   
@@ -34,13 +45,17 @@ class PageItemComponent extends BaseComponent<HTMLElement> implements Composable
     }
 }
 
+// export class DarkPageItemComponent extends BaseComponent<HTMLElement> implements SectionContainer {
+
+// }
+
 export class PageComponent extends BaseComponent<HTMLUListElement> implements Composable {
-    constructor() {
+    constructor(private readonly pageItemConstructor: SectionContainerConstructor) {
         super(`<ul class="page"></ul>`)
     }
 
     addChild(section: Component) {
-        const item = new PageItemComponent();
+        const item = new this.pageItemConstructor();
         item.addChild(section);
         item.attachTo(this.element, 'beforeend');
         item.setOnCloseListener(() => {

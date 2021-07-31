@@ -1,4 +1,4 @@
-import { Composable, PageComponent } from "./components/page/page.js";
+import { Composable, PageComponent, PageItemComponent } from "./components/page/page.js";
 import { ImageComponent } from "./components/page/items/image.js";
 import { NoteComponent } from "./components/page/items/note.js";
 import { TodoComponent } from "./components/page/items/todo.js";
@@ -11,7 +11,7 @@ class App {
     // 내부에서 다른 클래스를 만드는 것은 위험한 행위이다~! DI를 통해 외부로 부터 주입을 받아야 더 확장가능하고
     // 나중에 unit test 하기에도 좋다.
     constructor(appRoot: HTMLElement) {
-        this.page = new PageComponent();
+        this.page = new PageComponent(PageItemComponent);
         this.page.attachTo(appRoot)
 
         const image = new ImageComponent("ImageComponent Title", "https://picsum.photos/600/300");

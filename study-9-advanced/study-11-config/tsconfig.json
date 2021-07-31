@@ -1,0 +1,87 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+    /* Basic Options */
+    /* 컴파일이 될 때마다 모든 파일을 다 컴파일 하는 것이 아니라 이전 컴파일 된 파일과 비교해서 수정된 사항이 있는 부분만 컴파일해주는 옵션 */
+    // 다 컴파일 하는게 아니니까 컴파일 속도는 빨라질 수 잇다. 다만, 예전에 컴파일 했던 정보를 디스크에 보관하니까 프로젝트 용량을 많이 먹을 수 있음.
+    // "incremental": true,                         /* Enable incremental compilation */
+    "target": "es5",                                /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'. */
+    /* 컴파일 할 때 모듈 정보를 어떻게 할 것인지를 결정, node project라면, commonjs를, 브라우저 환경이라면 es6을 */
+    "module": "ES6",                           /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
+    // "lib": [""],                                   /* Specify library files to be included in the compilation. */
+    // 프로젝트 안에서 javascript 파일을 같이 쓸 것인지
+    // "allowJs": true,                             /* Allow javascript files to be compiled. */
+    // js 파일에서 오류 발생 시 오류를 보여줄 것인지
+    // "checkJs": true,                             /* Report errors in .js files. */
+    // React에 관련된 것을 사용할 것인지
+    // "jsx": "preserve",                           /* Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'. */
+    // "declaration": true,                         /* Generates corresponding '.d.ts' file. */
+    // "declarationMap": true,                      /* Generates a sourcemap for each corresponding '.d.ts' file. */
+    // debug 시 유용하게 사용할 수 있는 것
+    "sourceMap": true,                           /* Generates corresponding '.map' file. */
+    // 다수의 ts 파일을 하나의 js 파일로 만들고 싶을 때 사용
+    // "outFile": "./",                             /* Concatenate and emit output to single file. */
+    "outDir": "./build",                              /* Redirect output structure to the directory. */
+    "rootDir": "./src",                             /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    // 이전에 빌드된 정보들을 기억하고 있어서 다음에 빌드 할 때 좀 더 빠르게 빌드할 수 있게 해줌. incremental과 같이 사용
+    // "composite": true,                           /* Enable project compilation */
+    // incremental 옵션이 켜져있는 경우 관련된 파일들을 저장할 곳을 지정하는 것
+    // "tsBuildInfoFile": "./",                     /* Specify file to store incremental compilation information */
+    // comment를 없애주는 것
+    // "removeComments": true,                      /* Do not emit comments to output. */
+    // compile error check만 하고 js로 변환은 안 하는 옵션
+    // "noEmit": true,                              /* Do not emit outputs. */
+    // 정말 예전 버전 지원이 필요한 경우.
+    // "importHelpers": true,                       /* Import emit helpers from 'tslib'. */
+    // "downlevelIteration": true,                  /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
+    // 각각의 파일을 다른 모듈로 변환하는 것
+    // "isolatedModules": true,                     /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
+
+    /* Strict Type-Checking Options */
+    "strict": true,                                 /* Enable all strict type-checking options. */
+    // "noImplicitAny": true,                       /* Raise error on expressions and declarations with an implied 'any' type. */
+    // "strictNullChecks": true,                    /* Enable strict null checks. */
+    // "strictFunctionTypes": true,                 /* Enable strict checking of function types. */
+    // "strictBindCallApply": true,                 /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
+    // "strictPropertyInitialization": true,        /* Enable strict checking of property initialization in classes. */
+    // "noImplicitThis": true,                      /* Raise error on 'this' expressions with an implied 'any' type. */
+    // "alwaysStrict": true,                        /* Parse in strict mode and emit "use strict" for each source file. */
+
+    /* Additional Checks */
+    // "noUnusedLocals": true,                      /* Report errors on unused locals. */
+    // "noUnusedParameters": true,                  /* Report errors on unused parameters. */
+    // "noImplicitReturns": true,                   /* Report error when not all code paths in function return a value. */
+    // "noFallthroughCasesInSwitch": true,          /* Report errors for fallthrough cases in switch statement. */
+    // "noUncheckedIndexedAccess": true,            /* Include 'undefined' in index signature results */
+    // "noImplicitOverride": true,                  /* Ensure overriding members in derived classes are marked with an 'override' modifier. */
+    // "noPropertyAccessFromIndexSignature": true,  /* Require undeclared properties from index signatures to use element accesses. */
+
+    /* Module Resolution Options */
+    // "moduleResolution": "node",                  /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+    // "baseUrl": "./",                             /* Base directory to resolve non-absolute module names. */
+    // "paths": {},                                 /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+    // "rootDirs": [],                              /* List of root folders whose combined content represents the structure of the project at runtime. */
+    // "typeRoots": [],                             /* List of folders to include type definitions from. */
+    // "types": [],                                 /* Type declaration files to be included in compilation. */
+    // "allowSyntheticDefaultImports": true,        /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
+    "esModuleInterop": true,                        /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+    // "preserveSymlinks": true,                    /* Do not resolve the real path of symlinks. */
+    // "allowUmdGlobalAccess": true,                /* Allow accessing UMD globals from modules. */
+
+    /* Source Map Options */
+    // "sourceRoot": "",                            /* Specify the location where debugger should locate TypeScript files instead of source locations. */
+    // "mapRoot": "",                               /* Specify the location where debugger should locate map files instead of generated locations. */
+    // "inlineSourceMap": true,                     /* Emit a single file with source maps instead of having a separate file. */
+    // "inlineSources": true,                       /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
+
+    /* Experimental Options */
+    // "experimentalDecorators": true,              /* Enables experimental support for ES7 decorators. */
+    // "emitDecoratorMetadata": true,               /* Enables experimental support for emitting type metadata for decorators. */
+
+    /* Advanced Options */
+    "skipLibCheck": true,                           /* Skip type checking of declaration files. */
+    "forceConsistentCasingInFileNames": true        /* Disallow inconsistently-cased references to the same file. */
+  },
+  "exclude": ["./src/dev.ts"]
+}

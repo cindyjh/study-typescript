@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 이 어플리케이션에 대한 설명, -->
+    <!-- meta data: 검색 엔진을 위함.. -->
+    <!-- 필요한 리소스를 링크하는 곳 -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion</title>
+    <link rel="stylesheet" href="./style/style.css">
+    <!-- defer 옵션을 줘서 비동기로 다운로드 받도록 한다. -->
+    <!-- 다수의 자바스크립트 파일로 모듈을 이용할 것이기 때문에 type을 module로 준다. -->
+    <script type="module" src="./dist/app.js" defer></script>
+</head>
+<body>
+    <!-- 사용자에게 보이는 UI를 넣는다. -->
+    <div class="app">
+        <header class="banner">
+            <h1 class="banner__title">Motion</h1>
+            <ul class="control-panel">
+                <!-- (li>button.create-button)*4 -->
+                <li><button id="new-image" class="create-button">Image </button></li>
+                <li><button id="new-video" class="create-button">Video</button></li>
+                <li><button id="new-note" class="create-button">Note</button></li>
+                <li><button id="new-todo" class="create-button">Todo</button></li>
+            </ul>
+        </header>
+        <!-- section card를 넣을 document를 만들겠다. -->
+        <!-- main 태그에는 동적으로 요소를 추가해 줄 것이다. 아무것도 작성 X-->
+        <main class="document"></main>
+        <footer class="footer">
+            <p>© Copyright by Dream Coding Academy. All right reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

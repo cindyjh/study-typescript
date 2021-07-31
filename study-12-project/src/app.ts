@@ -11,7 +11,7 @@ class App {
 
         this.image = new ImageComponent("첫번째이미지", "https://picsum.photos/600/300");
         this.image.attachTo(appRoot, 'beforeend');
-    }
+    } 
 }
 
 new App(document.querySelector('.document')! as HTMLElement)

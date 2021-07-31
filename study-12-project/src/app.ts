@@ -40,6 +40,14 @@ class App {
             '#new-todo',
             TextSectionInput,
             (input: TextSectionInput) => new TodoComponent(input.title, input.body))
+
+
+        // dummy data
+        this.page.addChild(new ImageComponent('Image 1', "https://picsum.photos/800/400"))
+        this.page.addChild(new VideoComponent('Video 1', "https://www.youtube.com/watch?v=m7wsrVQsVjI"))
+        this.page.addChild(new NoteComponent('Note 1', "This is first Note"))
+        this.page.addChild(new NoteComponent('Todo 1', "This is first Todo"))
+        this.page.addChild(new ImageComponent('Image 2', "https://picsum.photos/800/400"))
     }
 
     private bindElementToDialog<T extends (MediaData | TextData) & Component>(

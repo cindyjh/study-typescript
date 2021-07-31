@@ -21,7 +21,7 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
     private closeListener?: OnCloseListener;
     constructor() {
         super(`   
-        <li class="page-item">
+        <li draggable="true" class="page-item">
             <section class="page-item__body"></section>
             <div class="page-item__controls">
                 <button class="close">&times;</button>
@@ -33,6 +33,13 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
         closeBtn.onclick = () => {
             this.closeListener && this.closeListener()
         }
+
+        this.element.addEventListener('dragstart', this.dragStart);
+        this.element.addEventListener('dragend', this.dragEnd);
+        // this.element.addEventListener('dragover', this.dragOver);
+        // this.element.addEventListener('dragenter', this.dragEnter);
+        // this.element.addEventListener('dragleave', this.dragLeave);
+        // this.element.addEventListener('drop', this.dragDrop);
     }
 
     addChild(child: Component) {
@@ -43,6 +50,49 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
     setOnCloseListener(listener: OnCloseListener) {
         this.closeListener = listener;
     }
+
+    addEventListener() {
+        this.element.addEventListener
+    }
+
+    // Drag Functions
+    dragStart(event: DragEvent) {
+        console.log('dragStart', event)
+        // this.className += ' hold';
+        // setTimeout(() => (this.className = 'invisible'), 0);
+    }
+
+    dragEnd(event: DragEvent) {
+        console.log('dragEnd', event)
+        // this.className = 'fill';
+    }
+
+    dragOver(e: DragEvent) {
+        console.log('dragOver');
+        
+        e.preventDefault();
+    }
+
+    dragEnter(e: DragEvent) {
+        console.log('dragEnter');
+        
+        e.preventDefault();
+        // this.className += ' hovered';
+    }
+
+    dragLeave() {
+        console.log('dragLeave');
+        
+    // this.className = 'empty';
+    }
+
+    dragDrop() {
+        console.log('dragDrop');
+        
+    // this.className = 'empty';
+    // this.append(fill);
+    }
+
 }
 
 // export class DarkPageItemComponent extends BaseComponent<HTMLElement> implements SectionContainer {
@@ -61,5 +111,18 @@ export class PageComponent extends BaseComponent<HTMLUListElement> implements Co
         item.setOnCloseListener(() => {
             item.removeFrom(this.element)
         })
+
+        this.element.addEventListener('dragover', this.dragOver)
+        this.element.addEventListener('dragover', this.dragDrop)
+    }
+
+    dragOver(event: DragEvent) {
+        event.preventDefault();
+        console.log('dragOver', event); 
+    }
+
+    dragDrop(event: DragEvent) {
+        event.preventDefault()
+        console.log('dragOver', event);
     }
 }

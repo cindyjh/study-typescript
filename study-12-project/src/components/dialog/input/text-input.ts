@@ -1,8 +1,9 @@
 // import { PageComponent } from "./page.js";
 
 import { BaseComponent } from "../../component.js";
+import { TextData } from "../dialog.js";
 
-export class TextSectionInput extends BaseComponent<HTMLImageElement> {
+export class TextSectionInput extends BaseComponent<HTMLImageElement> implements TextData {
     constructor() {
         super(`
             <div>

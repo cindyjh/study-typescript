@@ -1,6 +1,6 @@
 // import { PageComponent } from "./page.js";
 
-import { BaseComponent } from "../component.js";
+import { BaseComponent } from "../../component.js";
 
 export class ImageComponent extends BaseComponent<HTMLImageElement> {
     constructor(readonly title: string, readonly url: string) {

@@ -5,42 +5,90 @@ import { TodoComponent } from "./components/page/items/todo.js";
 import { VideoComponent } from "./components/page/items/video.js";
 import { Component } from "./components/component.js";
 import { InputDialog } from "./components/dialog/dialog.js";
+import { MediaSectionInput } from "./components/dialog/input/media-input.js";
+import { TextSectionInput } from "./components/dialog/input/text-input.js";
 
 class App {
     private readonly page: Component & Composable;
 
     // 내부에서 다른 클래스를 만드는 것은 위험한 행위이다~! DI를 통해 외부로 부터 주입을 받아야 더 확장가능하고
     // 나중에 unit test 하기에도 좋다.
-    constructor(appRoot: HTMLElement) {
+    constructor(appRoot: HTMLElement, dialogRoot: HTMLElement) {
         this.page = new PageComponent(PageItemComponent);
         this.page.attachTo(appRoot)
-
-        const image = new ImageComponent("ImageComponent Title", "https://picsum.photos/600/300");
-        this.page.addChild(image);
-
-        const video = new VideoComponent("videoComponent Title", "https://www.youtube.com/embed/iOt5AZmGg5o")
-        this.page.addChild(video);
-
-        const note = new NoteComponent('NoteComponent Title', 'body');
-        this.page.addChild(note);
-
-        const todo = new TodoComponent("TodoComponent Title", 'todo')
-        this.page.addChild(todo);
 
         const imageBtn = document.querySelector('#new-image')! as HTMLButtonElement;
         imageBtn.addEventListener('click', () => {
             const dialog = new InputDialog();
+            const mediaSection = new MediaSectionInput();
+            dialog.addChild(mediaSection);
+            dialog.attachTo(dialogRoot)
+
             dialog.setOnCloseListener(() => {
-                dialog.removeFrom(document.body);
+                dialog.removeFrom(dialogRoot);
             })
             dialog.setOnSubmitListener(() => {
-                // TODO: 섹션을 만들어 페이지에 추가해줘야 한다.
-                dialog.removeFrom(document.body);
+                // https://picsum.photos/600/300
+                const image = new ImageComponent(mediaSection.title, mediaSection.url);
+                this.page.addChild(image);
+                dialog.removeFrom(dialogRoot);
             })
-
-            dialog.attachTo(document.body)
         })
-    } 
+
+        const videoBtn = document.querySelector('#new-video')! as HTMLButtonElement;
+        videoBtn.addEventListener('click', () => {
+            const dialog = new InputDialog();
+            const mediaSection = new MediaSectionInput();
+            dialog.addChild(mediaSection);
+            dialog.attachTo(dialogRoot)
+
+            dialog.setOnCloseListener(() => {
+                dialog.removeFrom(dialogRoot);
+            })
+            dialog.setOnSubmitListener(() => {
+                // https://picsum.photos/600/300
+                const image = new VideoComponent(mediaSection.title, mediaSection.url);
+                this.page.addChild(image);
+                dialog.removeFrom(dialogRoot);
+            })
+        })
+
+        const noteBtn = document.querySelector('#new-note')! as HTMLButtonElement;
+        noteBtn.addEventListener('click', () => {
+            const dialog = new InputDialog();
+            const textSection = new TextSectionInput();
+            dialog.addChild(textSection);
+            dialog.attachTo(dialogRoot)
+
+            dialog.setOnCloseListener(() => {
+                dialog.removeFrom(dialogRoot);
+            })
+            dialog.setOnSubmitListener(() => {
+                // https://picsum.photos/600/300
+                const image = new NoteComponent(textSection.title, textSection.body);
+                this.page.addChild(image);
+                dialog.removeFrom(dialogRoot);
+            })
+        })
+
+        const todoBtn = document.querySelector('#new-todo')! as HTMLButtonElement;
+        todoBtn.addEventListener('click', () => {
+            const dialog = new InputDialog();
+            const textSection = new TextSectionInput();
+            dialog.addChild(textSection);
+            dialog.attachTo(dialogRoot)
+
+            dialog.setOnCloseListener(() => {
+                dialog.removeFrom(dialogRoot);
+            })
+            dialog.setOnSubmitListener(() => {
+                // https://picsum.photos/600/300
+                const image = new TodoComponent(textSection.title, textSection.body);
+                this.page.addChild(image);
+                dialog.removeFrom(dialogRoot);
+            })
+        })
+    }
 }
 
-new App(document.querySelector('.document')! as HTMLElement)
+new App(document.querySelector('.document')! as HTMLElement, document.body)

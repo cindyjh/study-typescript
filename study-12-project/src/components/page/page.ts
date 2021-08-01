@@ -1,3 +1,5 @@
+import { EnableDragging, EnableDrop, EnableHover } from "../../decorators/draggable.js";
+import { Draggable, Droppable, Hoverable } from "../common/type.js";
 import { BaseComponent, Component } from "../component.js";
 
 export interface Composable {
@@ -8,7 +10,7 @@ type OnCloseListener = () => void;
 type DragState = 'start' | 'stop' | 'enter' | 'leave';
 type OnDragStateListener<T extends Component> = (target: T, state: DragState) => void;
 
-interface SectionContainer extends Component, Composable {
+interface SectionContainer extends Component, Composable, Draggable, Hoverable {
     setOnCloseListener(listener: OnCloseListener): void;
     setOnDragStateListener(listener: OnDragStateListener<SectionContainer>): void;
     muteChildren(state: 'mute' | 'unmute'): void;
@@ -23,6 +25,8 @@ type SectionContainerConstructor = {
 
 // 어떤 방식으로 UI를 만들든
 // closeListener를 꼭 구현해주어야 한다.
+@EnableDragging
+@EnableHover
 export class PageItemComponent extends BaseComponent<HTMLElement> implements SectionContainer{
     private closeListener?: OnCloseListener;
     private dragStateListener?: OnDragStateListener<PageItemComponent>;
@@ -41,19 +45,6 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
         closeBtn.onclick = () => {
             this.closeListener && this.closeListener()
         }
-
-        this.element.addEventListener('dragstart', (event: DragEvent) => {
-            this.onDragStart(event);
-        });
-        this.element.addEventListener('dragend', (event: DragEvent) => {
-            this.onDragEnd(event)
-        });
-        this.element.addEventListener('dragenter', (event: DragEvent) => {
-            this.onDragEnter(event)
-        });
-        this.element.addEventListener('dragleave', (event: DragEvent) => {
-            this.onDragLeave(event)
-        });
     }
 
     // Drag Functions
@@ -117,28 +108,19 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
 // export class DarkPageItemComponent extends BaseComponent<HTMLElement> implements SectionContainer {
 
 // }
-
-export class PageComponent extends BaseComponent<HTMLUListElement> implements Composable {
+@EnableDrop
+export class PageComponent extends BaseComponent<HTMLUListElement> implements Composable, Droppable {
     private children = new Set<SectionContainer>();
     private dropTarget?: SectionContainer
     private dragTarget?: SectionContainer
     constructor(private readonly pageItemConstructor: SectionContainerConstructor) {
         super(`<ul class="page"></ul>`)
-        
-        this.element.addEventListener('drop', (event) => {
-            this.onDragDrop(event)
-        })
-        this.element.addEventListener('dragover', (event) => {
-            this.onDragOver(event);   
-        })
     }
 
-    onDragOver(event: DragEvent) {
-        event.preventDefault();
-    }
+    onDragOver(_: DragEvent) {
 
+    }
     onDragDrop(event: DragEvent) {
-        event.preventDefault()
         if (!this.dropTarget) {
             return;
         }

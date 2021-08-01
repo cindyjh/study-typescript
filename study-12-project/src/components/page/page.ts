@@ -5,9 +5,13 @@ export interface Composable {
 }
 
 type OnCloseListener = () => void;
+type DragState = 'start' | 'stop' | 'enter' | 'leave';
+type OnDragStateListener<T extends Component> = (target: T, state: DragState) => void;
 
 interface SectionContainer extends Component, Composable {
     setOnCloseListener(listener: OnCloseListener): void;
+    setOnDragStateListener(listener: OnDragStateListener<SectionContainer>): void;
+    muteChildren(state: 'mute' | 'unmute'): void;
 }
 
 type SectionContainerConstructor = {
@@ -19,6 +23,8 @@ type SectionContainerConstructor = {
 // closeListener를 꼭 구현해주어야 한다.
 export class PageItemComponent extends BaseComponent<HTMLElement> implements SectionContainer{
     private closeListener?: OnCloseListener;
+    private dragStateListener?: OnDragStateListener<PageItemComponent>;
+
     constructor() {
         super(`   
         <li draggable="true" class="page-item">
@@ -34,12 +40,39 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
             this.closeListener && this.closeListener()
         }
 
-        this.element.addEventListener('dragstart', this.dragStart);
-        this.element.addEventListener('dragend', this.dragEnd);
-        // this.element.addEventListener('dragover', this.dragOver);
-        // this.element.addEventListener('dragenter', this.dragEnter);
-        // this.element.addEventListener('dragleave', this.dragLeave);
-        // this.element.addEventListener('drop', this.dragDrop);
+        this.element.addEventListener('dragstart', (event: DragEvent) => {
+            this.onDragStart(event);
+        });
+        this.element.addEventListener('dragend', (event: DragEvent) => {
+            this.onDragEnd(event)
+        });
+        this.element.addEventListener('dragenter', (event: DragEvent) => {
+            this.onDragEnter(event)
+        });
+        this.element.addEventListener('dragleave', (event: DragEvent) => {
+            this.onDragLeave(event)
+        });
+    }
+
+    // Drag Functions
+    onDragStart(_: DragEvent) {
+        this.notifyDragObservers('start')
+    }
+
+    onDragEnd(_: DragEvent) {
+        this.notifyDragObservers('stop')
+    }
+
+    onDragEnter(_: DragEvent) {
+        this.notifyDragObservers('enter')
+    }
+
+    onDragLeave(_: DragEvent) {
+        this.notifyDragObservers('leave')
+    }
+
+    notifyDragObservers(state: DragState) {
+        this.dragStateListener && this.dragStateListener(this, state)
     }
 
     addChild(child: Component) {
@@ -51,48 +84,20 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
         this.closeListener = listener;
     }
 
+    setOnDragStateListener(listener: OnDragStateListener<PageItemComponent>) {
+        this.dragStateListener = listener
+    }
+
     addEventListener() {
         this.element.addEventListener
     }
-
-    // Drag Functions
-    dragStart(event: DragEvent) {
-        console.log('dragStart', event)
-        // this.className += ' hold';
-        // setTimeout(() => (this.className = 'invisible'), 0);
+    muteChildren(state: 'mute' | 'unmute') {
+        if (state === 'mute') {
+            this.element.classList.add('mute-children')
+        } else {
+            this.element.classList.remove('mute-children')
+        }
     }
-
-    dragEnd(event: DragEvent) {
-        console.log('dragEnd', event)
-        // this.className = 'fill';
-    }
-
-    dragOver(e: DragEvent) {
-        console.log('dragOver');
-        
-        e.preventDefault();
-    }
-
-    dragEnter(e: DragEvent) {
-        console.log('dragEnter');
-        
-        e.preventDefault();
-        // this.className += ' hovered';
-    }
-
-    dragLeave() {
-        console.log('dragLeave');
-        
-    // this.className = 'empty';
-    }
-
-    dragDrop() {
-        console.log('dragDrop');
-        
-    // this.className = 'empty';
-    // this.append(fill);
-    }
-
 }
 
 // export class DarkPageItemComponent extends BaseComponent<HTMLElement> implements SectionContainer {
@@ -100,29 +105,72 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
 // }
 
 export class PageComponent extends BaseComponent<HTMLUListElement> implements Composable {
+    private children = new Set<SectionContainer>();
+    private dropTarget?: SectionContainer
+    private dragTarget?: SectionContainer
     constructor(private readonly pageItemConstructor: SectionContainerConstructor) {
         super(`<ul class="page"></ul>`)
+        
+        this.element.addEventListener('drop', (event) => {
+            this.onDragDrop(event)
+        })
+        this.element.addEventListener('dragover', (event) => {
+            this.onDragOver(event);   
+        })
+    }
+
+    onDragOver(event: DragEvent) {
+        event.preventDefault();
+    }
+
+    onDragDrop(event: DragEvent) {
+        event.preventDefault()
+        if (!this.dropTarget) {
+            return;
+        }
+
+        if (this.dragTarget && this.dragTarget !== this.dropTarget) {
+            this.dragTarget.removeFrom(this.element)
+            this.dropTarget.attach(this.dragTarget, 'beforebegin')
+
+        }
     }
 
     addChild(section: Component) {
         const item = new this.pageItemConstructor();
+        this.children.add(item)
         item.addChild(section);
         item.attachTo(this.element, 'beforeend');
         item.setOnCloseListener(() => {
             item.removeFrom(this.element)
+            this.children.delete(item)
         })
-
-        this.element.addEventListener('dragover', this.dragOver)
-        this.element.addEventListener('dragover', this.dragDrop)
+        item.setOnDragStateListener((target: SectionContainer, state: DragState) => {
+            switch (state) {
+                case 'start':
+                    // 모든 포인터를 음소거해라 ?
+                    this.updateSections('mute');
+                    this.dragTarget = target
+                break;
+                case 'stop':
+                    this.dragTarget = undefined
+                    this.updateSections('unmute');
+                    break;
+                case 'enter':
+                    this.dropTarget = target
+                    break;
+                case 'leave':
+                    this.dropTarget = undefined
+                    break;
+                default:
+                    throw new Error(`Unsupported state: ${state}`)
+            }
+        })
     }
 
-    dragOver(event: DragEvent) {
-        event.preventDefault();
-        console.log('dragOver', event); 
-    }
-
-    dragDrop(event: DragEvent) {
-        event.preventDefault()
-        console.log('dragOver', event);
+    private updateSections(state: 'mute' | 'unmute') {
+        this.children.forEach((section: SectionContainer) => {
+            section.muteChildren(state)
+        })
     }
 }

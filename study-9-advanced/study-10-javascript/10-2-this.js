@@ -42,6 +42,18 @@
     // window 객체에서 접근 가능함.
     window.helloWorld()
 
+    var badVar = 10;
+    function test() {
+        console.log(1, badVar)
+        badVar = 7;
+        teeee = 6;
+        console.log(teeee)
+        console.log(2, badVar)
+    }
+    function test2() {
+        var badVar = 4;
+        console.log(badVar) // 4
+    }
     // const나 let 키워드를 이용해서 변수를 선언하게 되면 이것들은 window에 등록되지 않는다.
 
     // block을 이용해서 local scope 에서 작성한 함수나 변수가 아니라
@@ -51,9 +63,14 @@
 
     // 한가지 예외는 var 키워드이다.
     // hoisting 문제 뿐 아니라 선언을 했는데 다시 재정의가 되는 다양한 문제가 있다. 쓰지마라
+    console.log(badVar) // 10
 
     var badVar = 'bad'
     window.badVar // 가능
-
+    console.log(badVar) // bad
+    test()
+    console.log(badVar) // 7
+    test2()
+    console.log(badVar) // 7
 
 }

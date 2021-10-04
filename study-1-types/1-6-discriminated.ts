@@ -42,6 +42,12 @@
     function printLoginState (loginState: LoginState): void {
         // cindy
         // const res = loginState.result; // 이렇게 위에서 result 값을 받아와 if 분기에 사용하면 오류가 뜬다 ㅎㅎ,,,
+        // if (res === 'success') {
+        //     console.log(`🎆 ${loginState.response.body}`);
+        // } else {
+        //     console.log(`😂 ${loginState.reson}`);
+        // }
+
         // 존내똑똑하네 ...
         if (loginState.result === 'success') {
             console.log(`🎆 ${loginState.response.body}`);

@@ -32,4 +32,6 @@
         button.nodeValue;
     }
     button?.nodeValue
+
+    const button2 = document.querySelector('class')!
 }

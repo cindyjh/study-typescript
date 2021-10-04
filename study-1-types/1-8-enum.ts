@@ -24,7 +24,7 @@
         Wednesday,  // 3
         Thursday,   // 4
         Friday,     // 5
-        Saterday,   // 6
+        Saturday,   // 6
         Sunday,      // 7
     }
     console.log(Days.Tuesday);
